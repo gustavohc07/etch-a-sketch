@@ -1,0 +1,62 @@
+.main {
+    margin: 0 1em 0em 1em;
+}
+
+.main--gradient {
+    background-color:#4b3832; 
+    background: linear-gradient(180deg, #fff4e6, #be9b7b, #4b3832);
+    height: 100%;
+    background-attachment: fixed;
+}
+
+.main__welcome {
+    text-align: center;
+    font-size: 2vh;
+}
+
+.main__buttons-top, .main__buttons-bottom {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.resetBtn, .colorBtn, .monoBtn, .partyBtn {
+    margin: 0 2em 1em 2em;
+    font-size: 1.1em;
+    
+}
+
+/* Colocar o grid aqui */
+.main__container {
+    display: flex;
+    justify-content: center;
+}
+
+.grid {  
+    border: 1px solid black;
+    height: 50vh;
+    width: 50%;
+    background-color: white;  
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.grid__element {
+    display: flex;
+    flex: 1 1 0;
+    border: 1px solid blue;
+
+}
+
+/* Colocar o grid aqui */
+
+.hooverPaint, .clickPaint {
+    margin: 1em 2em 0 2em;
+    font-size: 1.1em;
+}
+
+
+
+
+
+/* #4b3832 • #854442 • #fff4e6 • #3c2f2f • #be9b7b */
