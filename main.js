@@ -1,9 +1,22 @@
 const grid = document.querySelector('.grid');
-const shadeBtn = document.querySelector('.shadeBtn');
-const partyBtn = document.querySelector(".partyBtn");
-const monoBtn = document.querySelector(".monoBtn")
-const colorBtn = document.querySelector('.colorBtn')
 const reset = document.querySelector(".resetBtn");
+const colorBtn = document.querySelector('.colorBtn')
+const monoBtn = document.querySelector(".monoBtn")
+const partyBtn = document.querySelector(".partyBtn");
+const shadeBtn = document.querySelector('.shadeBtn');
+const hoverBtn = document.querySelector(".hover__paint");
+const clickBtn = document.querySelector(".click__paint");
+let picker = false;
+let black = true;
+let party = false;
+let shade = false;
+let activate = "";
+let brightness = 100;
+let decrement = 10;
+
+
+// Functions
+
 
 function createDefaultGrid() {
     let j = 0;
@@ -21,6 +34,14 @@ function createDefaultGrid() {
     }
 }
 
+function removeAllListeners() {
+    grid.removeEventListener('mouseover', setBlackColor)
+    grid.removeEventListener('mouseover', setRandomColor)
+    grid.removeEventListener('mouseover', setSelectColor)
+    grid.removeEventListener('click', setBlackColor)
+    grid.removeEventListener('click', setRandomColor)
+    grid.removeEventListener('click', setSelectColor)
+}
 
 function resetGrid() {
     let newGrid = prompt("Enter new value for your grid");
@@ -47,13 +68,6 @@ function resetGrid() {
     }
 }
 
-
-function removeAllListeners() {
-    grid.removeEventListener('mouseover', setBlackColor)
-    grid.removeEventListener('mouseover', setRandomColor)
-    grid.removeEventListener('mouseover', setSelectColor)
-}
-
 function getRandomColor() {
     const hexaCode = "ABCDEF0123456789";
     let hexaColor = "#";
@@ -68,40 +82,94 @@ function setSelectColor(e) {
     if (e.target.classList.contains('grid__element')) {
         const newColor = colorBtn.value;
         e.target.setAttribute('style', `background-color: ${newColor};`)
-        console.log("Ola Cor Selecionada")
     }
-}
-
-function activateSelectColor() {
-    removeAllListeners();
-    grid.addEventListener('mouseover', setSelectColor);
 }
 
 function setRandomColor(e) {
     if (e.target.classList.contains('grid__element')) {
         e.target.setAttribute('style', `background-color: ${getRandomColor()}`)
-        console.log("ola party")
     }
 }
 
 function setBlackColor(e) {
     if (e.target.classList.contains('grid__element')) {
         e.target.setAttribute('style', `background-color: black;`);
-        console.log("ola")
+    }
+}
+
+function activateSelectColor() {
+    picker = true;
+    black = false;
+    party = false;
+    shade = false;
+    removeAllListeners();
+    if (activate !== "") {
+        setWayToPaint()
+    }else {
+        grid.addEventListener('mouseover', setSelectColor)
     }
 }
 
 function activatePartyColor() {
-    removeAllListeners()
-    grid.addEventListener('mouseover', setRandomColor);
-    console.log("Party Ativado")
+    picker = false;
+    black = false;
+    party = true;
+    shade = false;
+    removeAllListeners();
+    if (activate !== "") {
+        setWayToPaint()
+    }else {
+        grid.addEventListener('mouseover', setRandomColor)
+    }
 }
 
 function activateBlackColor() {
+    picker = false;
+    black = true;
+    party = false;
+    shade = false;
     removeAllListeners()
-    grid.addEventListener('mouseover', setBlackColor)
-    console.log("Preto Ativado")
+    if (activate !== "") {
+        setWayToPaint()
+    }else {
+        grid.addEventListener('mouseover', setBlackColor)
+    }
 }
+
+function setWayToPaint() {
+    if (activate == "Hover Activated") {
+        removeAllListeners()
+        if (black == true) {
+            grid.addEventListener('mouseover', setBlackColor);
+        } else if (party == true) {
+            grid.addEventListener('mouseover', setRandomColor);
+        } else if (picker == true) {
+            grid.addEventListener('mouseover', setSelectColor)
+        }
+    } else if (activate == "Click Activated") {
+        removeAllListeners()
+        if (black == true) {
+            grid.addEventListener('click', setBlackColor);
+        } else if ( party == true) {
+            grid.addEventListener('click', setRandomColor);
+        } else if (picker == true) {
+            grid.addEventListener('click', setSelectColor);
+        }
+    } else {
+        return 'mouseover'
+    }
+}
+
+function shadeElement(e) {
+    if (e.target.style.filter > `brightness(0%)`) {
+        brightness -= decrement;
+        e.target.style.filter = `brightness(${brightness}%`;
+        return;
+    }
+}
+
+// Event Listeners
+
 
 createDefaultGrid();
 
@@ -110,19 +178,33 @@ grid.addEventListener('mouseover', setBlackColor);
 reset.addEventListener('click', resetGrid)
 
 colorBtn.addEventListener('change', activateSelectColor);
+
 colorBtn.addEventListener("click", activateSelectColor);
 
 monoBtn.addEventListener('click', activateBlackColor);
 
-partyBtn.addEventListener('click', activatePartyColor)
+partyBtn.addEventListener('click', activatePartyColor);
 
 shadeBtn.addEventListener('click', () => {
     removeAllListeners();
     grid.addEventListener('mouseover', (e) => {
         if (e.target.classList.contains("grid__element")) {
-            let brightness = 100;
-            e.target.style.filter = `brightness(${brightness - 50}%)`;
+            e.target.style.filter = `brightness(${brightness}%)`;
+            shadeElement(e);
             // e.target.setAttribute('style', `background-color: white;`);
         }
     })
+    return;
+})
+
+hoverBtn.addEventListener('click', ()=>{
+    activate = "Hover Activated";
+    console.log(activate);
+    setWayToPaint();
+})
+
+clickBtn.addEventListener('click', ()=>{
+    activate = "Click Activated";
+    console.log(activate);
+    setWayToPaint();
 })

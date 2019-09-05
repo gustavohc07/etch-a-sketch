@@ -47,7 +47,7 @@
 /* } */
 
 
-.hoover__paint, .click__paint {
+.hover__paint, .click__paint {
     margin: 1em 2em 0 2em;
     font-size: 1.1em;
 }
