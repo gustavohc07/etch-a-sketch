@@ -11,12 +11,23 @@ let black = true;
 let party = false;
 let shade = false;
 let activate = "";
-let brightness = 100;
-let decrement = 10;
 
+createDefaultGrid();
+
+const gridElement = document.querySelectorAll(".grid__element");
 
 // Functions
 
+function removeAllListeners() {
+    grid.removeEventListener('mouseover', setBlackColor)
+    grid.removeEventListener('mouseover', setRandomColor)
+    grid.removeEventListener('mouseover', setSelectColor)
+    grid.removeEventListener('mouseover', setShade)
+    grid.removeEventListener('click', setBlackColor)
+    grid.removeEventListener('click', setRandomColor)
+    grid.removeEventListener('click', setSelectColor)
+    grid.removeEventListener('click', setShade)
+}
 
 function createDefaultGrid() {
     let j = 0;
@@ -32,15 +43,6 @@ function createDefaultGrid() {
         }
         j++
     }
-}
-
-function removeAllListeners() {
-    grid.removeEventListener('mouseover', setBlackColor)
-    grid.removeEventListener('mouseover', setRandomColor)
-    grid.removeEventListener('mouseover', setSelectColor)
-    grid.removeEventListener('click', setBlackColor)
-    grid.removeEventListener('click', setRandomColor)
-    grid.removeEventListener('click', setSelectColor)
 }
 
 function resetGrid() {
@@ -78,22 +80,35 @@ function getRandomColor() {
     return hexaColor;
 }
 
+function setBrightness() {
+    for (i = 0; i < gridElement.length; i++) {
+        gridElement[i].style.filter = 'brightness(100%)';
+    }
+}
+
+
 function setSelectColor(e) {
     if (e.target.classList.contains('grid__element')) {
         const newColor = colorBtn.value;
-        e.target.setAttribute('style', `background-color: ${newColor};`)
+        e.target.setAttribute('style', `background-color: ${newColor}; filter: brightness(100%)`)
     }
 }
 
 function setRandomColor(e) {
     if (e.target.classList.contains('grid__element')) {
-        e.target.setAttribute('style', `background-color: ${getRandomColor()}`)
+        e.target.setAttribute('style', `background-color: ${getRandomColor()}; filter: brightness(100%);`)
     }
 }
 
 function setBlackColor(e) {
     if (e.target.classList.contains('grid__element')) {
         e.target.setAttribute('style', `background-color: black;`);
+    }
+}
+
+function setShade(e) {
+    if (e.target.classList.contains("grid__element")) {
+        e.target.style.filter = `brightness(${(e.target.style.filter.match(/\d+/g))-10}%)`
     }
 }
 
@@ -105,7 +120,7 @@ function activateSelectColor() {
     removeAllListeners();
     if (activate !== "") {
         setWayToPaint()
-    }else {
+    } else {
         grid.addEventListener('mouseover', setSelectColor)
     }
 }
@@ -118,7 +133,7 @@ function activatePartyColor() {
     removeAllListeners();
     if (activate !== "") {
         setWayToPaint()
-    }else {
+    } else {
         grid.addEventListener('mouseover', setRandomColor)
     }
 }
@@ -131,10 +146,25 @@ function activateBlackColor() {
     removeAllListeners()
     if (activate !== "") {
         setWayToPaint()
-    }else {
+    } else {
         grid.addEventListener('mouseover', setBlackColor)
     }
 }
+
+
+function activateShadeBtn() {
+    picker = false;
+    black = false;
+    party = false;
+    shade = true;
+    removeAllListeners();
+    if (activate !== "") {
+        setWayToPaint()
+    } else {
+        grid.addEventListener('mouseover', setShade)
+    }
+}
+
 
 function setWayToPaint() {
     if (activate == "Hover Activated") {
@@ -145,33 +175,28 @@ function setWayToPaint() {
             grid.addEventListener('mouseover', setRandomColor);
         } else if (picker == true) {
             grid.addEventListener('mouseover', setSelectColor)
+        } else if (shade == true) {
+            grid.addEventListener('mouseover', setShade)
         }
     } else if (activate == "Click Activated") {
         removeAllListeners()
         if (black == true) {
             grid.addEventListener('click', setBlackColor);
-        } else if ( party == true) {
+        } else if (party == true) {
             grid.addEventListener('click', setRandomColor);
         } else if (picker == true) {
             grid.addEventListener('click', setSelectColor);
+        } else if (shade == true) {
+            grid.addEventListener('click', setShade);
         }
     } else {
         return 'mouseover'
     }
 }
 
-function shadeElement(e) {
-    if (e.target.style.filter > `brightness(0%)`) {
-        brightness -= decrement;
-        e.target.style.filter = `brightness(${brightness}%`;
-        return;
-    }
-}
-
 // Event Listeners
 
-
-createDefaultGrid();
+setBrightness();
 
 grid.addEventListener('mouseover', setBlackColor);
 
@@ -185,25 +210,16 @@ monoBtn.addEventListener('click', activateBlackColor);
 
 partyBtn.addEventListener('click', activatePartyColor);
 
-shadeBtn.addEventListener('click', () => {
-    removeAllListeners();
-    grid.addEventListener('mouseover', (e) => {
-        if (e.target.classList.contains("grid__element")) {
-            e.target.style.filter = `brightness(${brightness}%)`;
-            shadeElement(e);
-            // e.target.setAttribute('style', `background-color: white;`);
-        }
-    })
-    return;
-})
+shadeBtn.addEventListener('click', activateShadeBtn);
 
-hoverBtn.addEventListener('click', ()=>{
+
+hoverBtn.addEventListener('click', () => {
     activate = "Hover Activated";
     console.log(activate);
     setWayToPaint();
 })
 
-clickBtn.addEventListener('click', ()=>{
+clickBtn.addEventListener('click', () => {
     activate = "Click Activated";
     console.log(activate);
     setWayToPaint();
