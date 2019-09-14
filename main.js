@@ -1,7 +1,7 @@
 const grid = document.querySelector('.grid');
 const reset = document.querySelector(".resetBtn");
-const colorBtn = document.querySelector('.colorBtn')
-const monoBtn = document.querySelector(".monoBtn")
+const colorBtn = document.querySelector('.colorBtn');
+const monoBtn = document.querySelector(".monoBtn");
 const partyBtn = document.querySelector(".partyBtn");
 const shadeBtn = document.querySelector('.shadeBtn');
 const hoverBtn = document.querySelector(".hover__paint");
@@ -19,13 +19,13 @@ const gridElement = document.querySelectorAll(".grid__element");
 // Functions
 
 function removeAllListeners() {
-    grid.removeEventListener('mouseover', setBlackColor)
-    grid.removeEventListener('mouseover', setRandomColor)
-    grid.removeEventListener('mouseover', setSelectColor)
-    grid.removeEventListener('mouseover', setShade)
-    grid.removeEventListener('click', setBlackColor)
-    grid.removeEventListener('click', setRandomColor)
-    grid.removeEventListener('click', setSelectColor)
+    grid.removeEventListener('mouseover', setBlackColor);
+    grid.removeEventListener('mouseover', setRandomColor);
+    grid.removeEventListener('mouseover', setSelectColor);
+    grid.removeEventListener('mouseover', setShade);
+    grid.removeEventListener('click', setBlackColor);
+    grid.removeEventListener('click', setRandomColor);
+    grid.removeEventListener('click', setSelectColor);
     grid.removeEventListener('click', setShade)
 }
 
@@ -33,12 +33,12 @@ function createDefaultGrid() {
     let j = 0;
     let row = 16;
     const column = row;
+    grid.setAttribute("style", `grid-template-columns: repeat(${column}, 1fr); grid-template-rows: repeat(${row}, 1fr);`);
     while (j < row) {
         for (i = 0; i < column; i++) {
             const gridElement = document.createElement('div');
             gridElement.classList.add('grid__element', 'grid__element--hover', 'grid__element--color');
-            gridElement.setAttribute("style", "background-color: white;")
-            grid.setAttribute("style", `grid-template-columns: repeat(${column}, 1fr); grid-template-rows: repeat(${row}, 1fr);`)
+            gridElement.setAttribute("style", "background-color: white;");
             document.querySelector(".grid").appendChild(gridElement);
         }
         j++
@@ -49,20 +49,20 @@ function resetGrid() {
     let newGrid = prompt("Enter new value for your grid");
     if (isNaN(newGrid) || newGrid == "") {
         alert("Invalid value");
-        return;
+
     } else if (newGrid == null) {
-        return;
+
     } else {
         while (grid.hasChildNodes()) {
             grid.removeChild(grid.lastChild);
         }
         let j = 0;
-        grid.setAttribute('style', `grid-template-rows: repeat(${newGrid}, 1fr); grid-template-columns: repeat(${newGrid}, 1fr);`)
+        grid.setAttribute('style', `grid-template-rows: repeat(${newGrid}, 1fr); grid-template-columns: repeat(${newGrid}, 1fr);`);
         while (j < newGrid) {
             for (i = 0; i < newGrid; i++) {
                 const gridElement = document.createElement('div');
-                gridElement.classList.add('grid__element', 'grid__element--color')
-                gridElement.setAttribute("style", "background-color: white;")
+                gridElement.classList.add('grid__element', 'grid__element--color');
+                gridElement.setAttribute("style", "background-color: white;");
                 document.querySelector(".grid").appendChild(gridElement);
             }
             j++
@@ -74,7 +74,7 @@ function getRandomColor() {
     const hexaCode = "ABCDEF0123456789";
     let hexaColor = "#";
     for (i = 0; i < 6; i++) {
-        let randomValue = Math.floor(Math.random() * hexaCode.length)
+        let randomValue = Math.floor(Math.random() * hexaCode.length);
         hexaColor += hexaCode.charAt(randomValue);
     }
     return hexaColor;
@@ -143,14 +143,13 @@ function activateBlackColor() {
     black = true;
     party = false;
     shade = false;
-    removeAllListeners()
+    removeAllListeners();
     if (activate !== "") {
         setWayToPaint()
     } else {
         grid.addEventListener('mouseover', setBlackColor)
     }
 }
-
 
 function activateShadeBtn() {
     picker = false;
@@ -165,28 +164,27 @@ function activateShadeBtn() {
     }
 }
 
-
 function setWayToPaint() {
-    if (activate == "Hover Activated") {
-        removeAllListeners()
-        if (black == true) {
+    if (activate === "Hover Activated") {
+        removeAllListeners();
+        if (black === true) {
             grid.addEventListener('mouseover', setBlackColor);
-        } else if (party == true) {
+        } else if (party === true) {
             grid.addEventListener('mouseover', setRandomColor);
-        } else if (picker == true) {
+        } else if (picker === true) {
             grid.addEventListener('mouseover', setSelectColor)
-        } else if (shade == true) {
+        } else if (shade === true) {
             grid.addEventListener('mouseover', setShade)
         }
-    } else if (activate == "Click Activated") {
-        removeAllListeners()
-        if (black == true) {
+    } else if (activate === "Click Activated") {
+        removeAllListeners();
+        if (black === true) {
             grid.addEventListener('click', setBlackColor);
-        } else if (party == true) {
+        } else if (party === true) {
             grid.addEventListener('click', setRandomColor);
-        } else if (picker == true) {
+        } else if (picker === true) {
             grid.addEventListener('click', setSelectColor);
-        } else if (shade == true) {
+        } else if (shade === true) {
             grid.addEventListener('click', setShade);
         }
     } else {
@@ -200,7 +198,7 @@ setBrightness();
 
 grid.addEventListener('mouseover', setBlackColor);
 
-reset.addEventListener('click', resetGrid)
+reset.addEventListener('click', resetGrid);
 
 colorBtn.addEventListener('change', activateSelectColor);
 
@@ -217,10 +215,10 @@ hoverBtn.addEventListener('click', () => {
     activate = "Hover Activated";
     console.log(activate);
     setWayToPaint();
-})
+});
 
 clickBtn.addEventListener('click', () => {
     activate = "Click Activated";
     console.log(activate);
     setWayToPaint();
-})
+});
